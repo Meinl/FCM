@@ -16,7 +16,7 @@ import {
 } from "react-native";
 
 import { createStackNavigator } from "react-navigation";
-import MapPage from '../screens/MapPage'
+//import MapPage from '../screens/MapPage'
 
 import FCM, { NotificationActionType } from "react-native-fcm";
 
@@ -25,7 +25,7 @@ import firebaseClient from "../helpers/FirebaseClient";
 
 registerKilledListener();
 
-class Home extends Component {
+export class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -252,6 +252,18 @@ class Home extends Component {
           >
             <Text style={styles.buttonText}>Ir a MapPage</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('CameraPage')}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Ir a CameraPage</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('TabPage')}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Ir a TabPage</Text>
+          </TouchableOpacity>
           <Text style={styles.instructions}>Init notif:</Text>
           <Text>{JSON.stringify(this.state.initNotif)}</Text>
           <Text style={styles.instructions}>Token:</Text>
@@ -276,15 +288,7 @@ class Home extends Component {
     this.setState({ tokenCopyFeedback: "" });
   }
 }
-class DetailPage extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Detail page</Text>
-      </View>
-    );
-  }
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

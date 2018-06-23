@@ -2,7 +2,25 @@ import React, { Component } from 'react';
 import { View, Text, PermissionsAndroid, Platform, Dimensions, Image } from 'react-native';
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 
-const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
+async function requestCameraPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        'title': 'Cool Photo App Camera Permission',
+        'message': 'Cool Photo App needs access to your camera ' +
+                   'so you can take awesome pictures.'
+      }
+    )
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can use the camera")
+    } else {
+      console.log("Camera permission denied")
+    }
+  } catch (err) {
+    console.warn(err)
+  }
+}
 
 const screen = Dimensions.get('window');
 //const selectedMarker = require('assets/pin.png');
@@ -13,7 +31,7 @@ const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class MapPage extends Component {
+export class MapPage extends Component {
   constructor(props) {
     super(props);
 
@@ -34,6 +52,7 @@ class MapPage extends Component {
   }
 
   componentDidMount() {
+    requestCameraPermission()
     navigator.geolocation.watchPosition(
       (position) => {
         console.log(position)
@@ -90,8 +109,6 @@ class MapPage extends Component {
           <Marker.Animated
             ref={marker => { this.marker = marker; }}
             coordinate={this.state.coordinate}
-            image={require('./pin.png')}
-            rotation={this.state.degree}
           />
         </MapView>
         <View style={{width:100, height:100, backgroundColor: 'white', position:'absolute', borderRadius:50, borderColor:'black', borderWidth: 4, justifyContent: 'center', alignItems: 'center'}}><Text style={{textAlign: 'center', fontSize: 22}}>{`${this.state.speed} km`}</Text></View>
